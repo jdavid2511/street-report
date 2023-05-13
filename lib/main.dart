@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:street_report/screens/map_screen.dart';
 import 'package:geolocator/geolocator.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
@@ -28,7 +28,6 @@ class geolocation extends StatefulWidget {
 }
 
 class _geolocationState extends State<geolocation> {
-  
   Future<Position> determinePosition() async {
     LocationPermission permission;
     permission = await Geolocator.checkPermission();
