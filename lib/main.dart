@@ -1,27 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:street_report/screens/map_screen.dart';
+import 'package:street_report/src/entity/mapScreenEntidadPage.dart';
+import 'package:street_report/src/screens/login/login_page.dart';
+import 'package:street_report/src/user/mapScreenUsuarioPage.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:street_report/src/screens/register/registerUserPage.dart';
 
 void main() async {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Street report',
-      theme: ThemeData(useMaterial3: true, brightness: Brightness.dark),
-      home: MapScreen(),
+      initialRoute: 'login',
+      routes: {
+        'login': (BuildContext context) => LoginPage(),
+        'register': (BuildContext context) => RegisterPage(),
+        'user': (BuildContext context) => const MapScreenUsuario(),
+        'entity': (BuildContext contex) => const MapScreenEntidad(),
+      },
+      theme: ThemeData(useMaterial3: true, brightness: Brightness.light),
     );
   }
 }
 
 class geolocation extends StatefulWidget {
-  const geolocation({super.key});
+  const geolocation({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<geolocation> createState() => _geolocationState();
@@ -38,12 +51,6 @@ class _geolocationState extends State<geolocation> {
       }
     }
     return await Geolocator.getCurrentPosition();
-  }
-
-  void getCurrentLocation() async {
-    Position position = await determinePosition();
-    print(position.latitude);
-    print(position.longitude);
   }
 
   @override
