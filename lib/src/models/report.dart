@@ -11,14 +11,13 @@ class Report {
   String? longitude;
   String? image;
 
-  Report({
-    this.id,
-    this.description,
-    this.address,
-    this.latitude,
-    this.longitude,
-    this.image
-  });
+  Report(
+      {this.id,
+      this.description,
+      this.address,
+      this.latitude,
+      this.longitude,
+      this.image});
 
   factory Report.fromJson(Map<String, dynamic> json) => Report(
         id: json["id"],
@@ -30,11 +29,11 @@ class Report {
       );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "description": description,
-    "address": address,
-    "latitude": latitude,
-    "longitude": longitude,
-    "image": image,
-  };
+        "id": id,
+        "description": description,
+        "address": address,
+        "latitude": latitude,
+        "longitude": longitude,
+        "image": image,
+      };
 }

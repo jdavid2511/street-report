@@ -89,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
             color: MyColors.primaryOpacityColor,
             borderRadius: BorderRadius.circular(30)),
         child: TextField(
+          obscureText: true,
           controller: _con.passwordController,
           decoration: InputDecoration(
               hintText: 'Contraseña',

@@ -29,7 +29,8 @@ class SharedPref {
 
   void logout(BuildContext context) async {
     await remove('user');
-    await remove('entidad');
+    await remove('entity');
+
     Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
   }
 }

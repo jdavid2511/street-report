@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1046831940536-c4hhba0595eg1hqqh2mdvgv60isuvkr4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1046831940536-c4hhba0595eg1hqqh2mdvgv60isuvkr4</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAZ4OkomrulEaBPkqeVVRTKO1qGkYfbVzc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1046831940536</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.streetReport</string>
+	<key>PROJECT_ID</key>
+	<string>street-report-52b23</string>
+	<key>STORAGE_BUCKET</key>
+	<string>street-report-52b23.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1046831940536:ios:bebf2b7232cecd50ae054d</string>
+	<key>DATABASE_URL</key>
+	<string>https://street-report-52b23-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

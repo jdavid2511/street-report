@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:street_report/src/entity/mapScreenEntidadPage.dart';
+import 'package:street_report/src/reports/reportScreen.dart';
 import 'package:street_report/src/screens/login/login_page.dart';
 import 'package:street_report/src/user/mapScreenUsuarioPage.dart';
 import 'package:geolocator/geolocator.dart';
@@ -23,8 +24,9 @@ class MyApp extends StatelessWidget {
       routes: {
         'login': (BuildContext context) => LoginPage(),
         'register': (BuildContext context) => RegisterPage(),
-        'user': (BuildContext context) => const MapScreenUsuario(),
-        'entity': (BuildContext contex) => const MapScreenEntidad(),
+        'user/mapscreen': (BuildContext context) => const MapScreenUsuario(),
+        'entity/mapscreen': (BuildContext contex) => const MapScreenEntidad(),
+        'reports/screen': (BuildContext context) => const ReportScreen(),
       },
       theme: ThemeData(useMaterial3: true, brightness: Brightness.light),
     );

@@ -27,10 +27,12 @@ class LoginController {
     Entity entity = Entity.fromJson(await _sharedPref.read('entity') ?? {});
 
     if (user.sessionToken != null) {
-      Navigator.pushNamedAndRemoveUntil(context, 'user', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, 'user/mapscreen', (route) => false);
     }
     if (entity.sessionToken != null) {
-      Navigator.pushNamedAndRemoveUntil(context, 'entity', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, 'entity/mapscreen', (route) => false);
     }
   }
 
@@ -53,14 +55,16 @@ class LoginController {
       User user = User.fromJson(responseApi.data);
 
       _sharedPref.save('user', user.toJson());
-      Navigator.pushNamedAndRemoveUntil(context!, 'user', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context!, 'user/mapscreen', (route) => false);
       //hacer el salto a la lista
     }
     if (responseApiEntiy.success!) {
       Entity entity = Entity.fromJson(responseApiEntiy.data);
 
       _sharedPref.save('entity', entity.toJson());
-      Navigator.pushNamedAndRemoveUntil(context!, 'entity', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context!, 'entity/mapscreen', (route) => false);
       //hacer el salto a la lista
     } else {
       MySnackbar.show(context!, responseApi.message!);

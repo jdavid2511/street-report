@@ -21,7 +21,8 @@ class MapScreenEntidadController {
 
   ReportEntity? reportEntity;
   Function? refresh;
-  File? image;
+  File? imageFile;
+  bool? isEnable = true;
 
   Future? init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -31,15 +32,15 @@ class MapScreenEntidadController {
 
   void create() async {
     String description = descriptionController.text.trim();
-    String address = addressController.text;
-    String latitude = latitudeController.text;
+    String address = addressController.text.trim();
+    String latitude = latitudeController.text.trim();
     String longitude = longitudeController.text.trim();
 
     if (description.isEmpty || address.isEmpty) {
       MySnackbar.show(context!, 'Debes Ingresar Todos los Datos');
       return;
     }
-
+ 
     ReportEntity reportEntity = new ReportEntity(
       description: description,
       address: address,
@@ -48,21 +49,12 @@ class MapScreenEntidadController {
     );
 
     ResponseApi responseApi = await reportEntityProvider.create(reportEntity);
-
     MySnackbar.show(context!, responseApi.message!);
-
     print('Respuesta: ${responseApi.toJson()} ');
-
-    /*Stream stream = await reportProvider.createWithImage(report, image!);
-    stream.listen((res) {
-      // ResponseApi responseApi = await ReportProvider.create(Report);
-      ResponseApi responseApi = ResponseApi.fromJson(json.decode(res));
-      print('Respuesta: ${responseApi.toJson()} ');
-      MySnackbar.show(context!, responseApi.message!);
-    });*/
   }
 
-  void logout() {
+  logout(BuildContext context) {
+    print("salir");
     _sharedPref.logout(context!);
   }
 }

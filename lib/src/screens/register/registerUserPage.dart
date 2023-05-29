@@ -34,8 +34,8 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             Positioned(
               child: _textRegister(),
-              top: 43,
-              left: 25,
+              top: 47,
+              left: 34,
             ),
             Positioned(
               child: _iconBack(),

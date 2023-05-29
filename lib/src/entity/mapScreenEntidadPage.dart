@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,10 @@ import 'package:street_report/map_markers_death.dart';
 import 'package:charts_flutter_new/flutter.dart' as charts;
 import 'package:intl/intl.dart';
 import 'package:street_report/src/entity/mapScreenEntidadController.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+
+import '../api/enviroment.dart';
 
 const MAPBOX_ACCESS_TOKEN =
     'pk.eyJ1IjoiZGF2aWQyNTExIiwiYSI6ImNsZ3JnMGs1eTFpa2kzZ211Z3FkYXdwdGUifQ.-zKTIZtvJkEYweXRBtHzBQ';
@@ -29,6 +34,7 @@ class MapScreenEntidad extends StatefulWidget {
 class _MapScreenEntidadState extends State<MapScreenEntidad> {
   MapScreenEntidadController _con = MapScreenEntidadController();
   List<Marker> _markersWarning = [];
+
   List<String> _addresses = [];
   List<MapMarker> mapMaker = [];
   Position? _currentPosition;
@@ -37,11 +43,157 @@ class _MapScreenEntidadState extends State<MapScreenEntidad> {
   MapController mapController = MapController();
   final _pageController = PageController();
   int _selectedIndex = 0;
+  String _url = Enviroment.API_STREET_REPORT;
+  String _apiUser = "/api/reports";
+  String _apiEntity = "/api/reportsEntity";
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
+    getAllMarkersU();
+    getAllMarkersE();
+  }
+
+  List<dynamic> dataUser = [];
+  List<dynamic> dataEntity = [];
+  List<Marker> _markersUser = [];
+  List<Marker> _markersEntity = [];
+
+  Future getAllMarkersU() async {
+    const JsonDecoder decoder = JsonDecoder();
+    Uri url = Uri.http(_url, '$_apiUser/getAll');
+    var response = await http.get(url);
+    var jsonData = decoder.convert(response.body);
+
+    setState(() {
+      dataUser = jsonData;
+      _markersUser = fetchMarkersFromDataU(dataUser);
+    });
+
+    print(jsonData);
+    return "success";
+  }
+
+  Future getAllMarkersE() async {
+    const JsonDecoder decoder = JsonDecoder();
+    Uri url = Uri.http(_url, '$_apiEntity/getAll');
+    var response = await http.get(url);
+    var jsonData = decoder.convert(response.body);
+
+    setState(() {
+      dataEntity = jsonData;
+      _markersEntity = fetchMarkersFromDataE(dataEntity);
+    });
+
+    print(jsonData);
+    return "success";
+  }
+
+  List<Marker> fetchMarkersFromDataU(List<dynamic> dataUser) {
+    List<Marker> markers = [];
+
+    for (var item in dataUser) {
+      double latitude = item['latitude'];
+      double longitude = item['longitude'];
+      String description = item['description'];
+      String address = item['address'];
+
+      Marker marker = Marker(
+        width: 60.0,
+        height: 60.0,
+        point: LatLng(latitude, longitude),
+        builder: (ctx) => GestureDetector(
+          onTap: () {
+            showDialog(
+              context: ctx,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Reporte'),
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Descripcion: ${description}'),
+                      Text('Direccion: ${address}'),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Close'),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          child: Icon(
+            Icons.circle,
+            color: Color.fromARGB(255, 255, 0, 0),
+          ),
+        ),
+      );
+
+      markers.add(marker);
+    }
+
+    return markers;
+  }
+
+  List<Marker> fetchMarkersFromDataE(List<dynamic> dataEntity) {
+    List<Marker> markers = [];
+
+    for (var item in dataEntity) {
+      double latitude = item['latitude'];
+      double longitude = item['longitude'];
+      String description = item['description'];
+      String address = item['address'];
+
+      Marker marker = Marker(
+        width: 60.0,
+        height: 60.0,
+        point: LatLng(latitude, longitude),
+        builder: (ctx) => GestureDetector(
+          onTap: () {
+            showDialog(
+              context: ctx,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Reporte'),
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Descripcion: ${description}'),
+                      Text('Direccion: ${address}'),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Close'),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          child: Icon(
+            Icons.cell_tower,
+            color: Color.fromARGB(255, 255, 94, 0),
+          ),
+        ),
+      );
+
+      markers.add(marker);
+    }
+
+    return markers;
   }
 
   void _getCurrentLocation() async {
@@ -86,15 +238,6 @@ class _MapScreenEntidadState extends State<MapScreenEntidad> {
     return _markerList;
   }
 
-  Future<File?> _takePhoto() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      return File(pickedFile.path);
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final _markerList = _buildMarkersDeath();
@@ -107,9 +250,14 @@ class _MapScreenEntidadState extends State<MapScreenEntidad> {
         ),
         backgroundColor: Colors.blueAccent,
         actions: [
-          TextButton(
-            onPressed: _con.logout,
-            child: Text('salir'),
+          IconButton(
+            icon: Icon(
+              Icons.power_settings_new,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              _con.logout(context);
+            },
           ),
         ],
       ),
@@ -186,8 +334,6 @@ class _MapScreenEntidadState extends State<MapScreenEntidad> {
                                     ),
                                     TextButton(
                                       onPressed: () async {
-                                        File? image = await _takePhoto();
-
                                         setState(() {
                                           _markersWarning.add(
                                             Marker(
@@ -230,7 +376,7 @@ class _MapScreenEntidadState extends State<MapScreenEntidad> {
                                                   );
                                                 },
                                                 child: Icon(
-                                                  Icons.warning,
+                                                  Icons.cell_tower,
                                                   color: Color.fromARGB(
                                                       255, 255, 136, 0),
                                                 ),
@@ -259,6 +405,12 @@ class _MapScreenEntidadState extends State<MapScreenEntidad> {
                               'accessToken': MAPBOX_ACCESS_TOKEN,
                               'id': MAPBOX_STYLE,
                             },
+                          ),
+                          MarkerLayer(
+                            markers: _markersUser,
+                          ),
+                          MarkerLayer(
+                            markers: _markersEntity,
                           ),
                           MarkerLayer(
                             markers: _markerList,
@@ -290,7 +442,6 @@ class _MapScreenEntidadState extends State<MapScreenEntidad> {
                   bottom: 20,
                   height: MediaQuery.of(context).size.height * 0.3,
                   child: PageView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
                       controller: _pageController,
                       itemCount: mapMarkers.length,
                       itemBuilder: (context, index) {
@@ -308,6 +459,7 @@ class _MapScreenEntidadState extends State<MapScreenEntidad> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FloatingActionButton.small(
+              heroTag: 'zoomin',
               onPressed: _zoomin,
               child: Icon(Icons.zoom_in),
               backgroundColor: Colors.blueAccent,
@@ -317,6 +469,7 @@ class _MapScreenEntidadState extends State<MapScreenEntidad> {
               height: 8,
             ),
             FloatingActionButton.small(
+              heroTag: 'zoom_out',
               onPressed: () {
                 _zoomout();
               },
