@@ -26,10 +26,10 @@ class UserProvider {
       }
       request.fields['user'] = json.encode(<String, dynamic>{
         'email': user.email,
-        'password': user.password,
         'name': user.name,
         'lastname': user.lastname,
-        'phone': user.phone
+        'phone': user.phone,
+        'password': user.password
       });
       final response = await request.send(); //Envia la peticion
       return response.stream.transform(utf8.decoder);
